@@ -1,17 +1,41 @@
+from flask import Flask, render_template, request
 import random
 
-while True:
-  user = input("Pick your weapon: rock, paper, or scissors): ")
-  options = ["rock", "paper", "scissors"]
-  computer = random.choice(options)
-  print(f"\nYou picked {user}, computer picked {computer}.\n")
-  if user == computer:
-    print("It's a tie!")
-  if (user == "rock" and computer == "paper") or (user == "paper" and computer == "scissors") or (user == "scissors" and computer == "rock"):
-    print("You lost!")
-  if (computer == "rock" and user == "paper") or (computer == "paper" and user == "scissors") or (computer == "scissors" and user == "rock"):
-    print("You've won!")
+app = Flask(__name__)
 
-  play_again = input("Want to play again? (y/n): ")
-  if play_again.lower() != "y":
-    break
+def get_computer_move():
+    options = ["rock", "paper", "scissors"]
+    return options[random.randint(0,2)]
+
+def get_winner(player_choice, computer_choice):
+    winner = "computer"
+
+    if player_choice == computer_choice:
+        winner = "tie"
+    if player_choice == "rock" and computer_choice == "scissors":
+        winner = "player"
+    if player_choice == "scissors" and computer_choice == "paper":
+        winner = "player"
+    if player_choice == "paper" and computer_choice == "rock":
+        winner = "player"
+
+    return winner
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        if request.form.get('play_again') == 'Play Again':
+            return render_template("index.html")
+    return render_template("index.html")
+
+
+@app.route('/rps/<choice>')
+def rps(choice):
+    player_choice = choice.lower()    
+    computer_choice = get_computer_move()
+    winner = get_winner(player_choice, computer_choice)
+    
+    return render_template("rps.html", winner=winner, player_choice=player_choice, computer_choice=computer_choice)
+
+if __name__ == "__main__":
+    app.run()
