@@ -1,4 +1,3 @@
-
 while True:
     name = input("Enter a name: ")
     adjective_1 = input("Enter an adjective: ")
