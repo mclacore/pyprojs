@@ -13,11 +13,11 @@ def get_winner(player_choice, computer_choice):
     if player_choice == computer_choice:
         winner = "tie"
     if player_choice == "rock" and computer_choice == "scissors":
-        winner = "player"
+        winner = "you"
     if player_choice == "scissors" and computer_choice == "paper":
-        winner = "player"
+        winner = "you"
     if player_choice == "paper" and computer_choice == "rock":
-        winner = "player"
+        winner = "you"
 
     return winner
 
@@ -38,4 +38,4 @@ def rps(choice):
     return render_template("rps.html", winner=winner, player_choice=player_choice, computer_choice=computer_choice)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', debug=True)
