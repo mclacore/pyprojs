@@ -10,21 +10,19 @@ def main():
 
     if operation == "add":
         answer = int(input_1) + int(input_2)
-        print(answer)
 
 
     if operation == "subtract":
         answer = int(input_1) - int(input_2)
-        print(answer)
 
 
     if operation == "multiply":
         answer = int(input_1) * int(input_2)
-        print(answer)
 
 
     if operation == "divide":
         answer = int(input_1) / int(input_2)
-        print(answer)
+        
+    print(answer)
 
 main()
