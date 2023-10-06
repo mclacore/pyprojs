@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game History</title>
+</head>
+<body>
+    <h1>Game History</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Player Choice</th>
+            <th>Computer Choice</th>
+            <th>Winner</th>
+            <th>Timestamp</th>
+        </tr>
+        {% for entry in game_history %}
+        <tr>
+            <td>{{ entry[0] }}</td>
+            <td>{{ entry[1] }}</td>
+            <td>{{ entry[2] }}</td>
+            <td>{{ entry[3] }}</td>
+            <td>{{ entry[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
