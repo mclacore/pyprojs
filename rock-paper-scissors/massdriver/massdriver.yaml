@@ -1,48 +1,27 @@
 schema: draft-07
 name: rock-paper-scissors
-description: Rock Paper Scissors game with game history tracking using PostgresQL.
+description: Rock Paper Scissors game with game history tracking using GCS Bucket.
 source_url: github.com/massdriver-cloud/webinar-k8s-3tier-app
 access: private
 type: application
 
 app:
   envs:
-    DB_HOST: .connections.game_history.data.authentication.hostname
-    DB_PORT: (.connections.game_history.data.authentication.port|tostring)
-    DB_NAME: .params.database.name
-    DB_USER: .connections.game_history.data.authentication.username
-    DB_PASSWORD: .connections.game_history.data.authentication.password
-    # Use jq expressions to build environment variables from input params or connections
-    # LOG_LEVEL: .params.configuration.log_level
-    # MONGO_DSN: .connections.mongo_authentication.data.authentication.username + ":" + .connections.mongo_authentication.data.authentication.password + "@" + .connections.mongo_authentication.data.authentication.hostname + ":" + (.connections.mongo_authentication.data.authentication.port|tostring)
+    DB_HOST: .connections.postgres.data.authentication.hostname
+    DB_PORT: .connections.postgres.data.authentication.port
+    DB_USER: .connections.postgres.data.authentication.username
+    DB_PASSWORD: .connections.postgres.data.authentication.password
   policies: []
-    # Use jq expressions to select policies from artifact security blocks
-    # - .connections.sqs.data.security.iam.subscribe
   secrets: {}
-    # ENV_NAME:
-    #   required: # true or false - whether massdriver should enforce this value being set
-    #   title: # Set the title
-    #   description: # Set a description
 
 params:
   required:
-    - database
     - namespace
     - image
     - resourceRequests
     - replicas
     - ingress
   properties:
-    database:
-      title: Database Config
-      type: object
-      required:
-        - name
-      properties:
-        name:
-          title: Database Name
-          description: Name of the database to create for this application.
-          type: string
     namespace:
       title: Kubernetes Namespace
       description: Application will be deployed into this namespace. If the namespace doesn't exist, it will be created.
@@ -197,8 +176,10 @@ params:
 connections:
   required:
     - kubernetes_cluster
-    - game_history
+    - gcs
   properties:
+    gcs:
+      $ref: massdriver/gcp-gcs-bucket
     kubernetes_cluster:
       $ref: massdriver/kubernetes-cluster
     aws_authentication:
@@ -207,8 +188,6 @@ connections:
       $ref: massdriver/gcp-service-account
     azure_authentication:
       $ref: massdriver/azure-service-principal
-    game_history:
-      $ref: massdriver/postgresql-authentication
 
 
 #########
@@ -230,7 +209,6 @@ connections:
 
 ui:
   ui:order:
-    - database
     - namespace
     - image
     - command
@@ -257,8 +235,4 @@ ui:
       - enabled
       - host
       - path
-      - "*"
-  database:
-    ui:order:
-      - name
       - "*"
