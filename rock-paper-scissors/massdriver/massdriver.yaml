@@ -1,17 +1,15 @@
 schema: draft-07
 name: rock-paper-scissors
-description: Rock Paper Scissors game with game history tracking using GCS Bucket.
+description: Rock Paper Scissors game with game history tracking using Azure blob.
 source_url: github.com/massdriver-cloud/webinar-k8s-3tier-app
 access: private
 type: application
 
 app:
   envs:
-    DB_HOST: .connections.postgres.data.authentication.hostname
-    DB_PORT: .connections.postgres.data.authentication.port
-    DB_USER: .connections.postgres.data.authentication.username
-    DB_PASSWORD: .connections.postgres.data.authentication.password
-  policies: []
+    STORAGE_ENDPOINT: .connections.blob.data.infrastructure.endpoint
+  policies:
+    - .connections.blob.data.security.iam.read_write
   secrets: {}
 
 params:
@@ -176,10 +174,10 @@ params:
 connections:
   required:
     - kubernetes_cluster
-    - gcs
+    - blob
   properties:
-    gcs:
-      $ref: massdriver/gcp-gcs-bucket
+    blob:
+      $ref: massdriver/azure-storage-account-blob
     kubernetes_cluster:
       $ref: massdriver/kubernetes-cluster
     aws_authentication:
