@@ -21,6 +21,8 @@ jobs:
           artifact: ${{ secrets.AUTHENTICATION_ARTIFACT_ID }}
           region: westus
           image-tag: ${{ github.sha }}
+          build-context: /rock-paper-scissors/
+          dockerfile: /rock-paper-scissors/Dockerfile
       - name: Publish Bundle 
         uses: massdriver-cloud/actions/bundle_publish@v3
       - name: Set App1 Image Version
